@@ -1,0 +1,31 @@
+﻿{% load static %}
+<aside class="sidebar" id="sidebar">
+    <a class="brand" href="{% url 'dashboard' %}">
+        <span class="brand-icon">M</span>
+        <span><strong>MOTORTECH</strong><small>SERVICE CENTER</small></span>
+    </a>
+
+    <div class="menu-label">PRINCIPAL</div>
+    <a class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}" href="{% url 'dashboard' %}">
+        <span>◫</span> Dashboard
+    </a>
+
+    <div class="menu-label">GESTIÓN DEL TALLER</div>
+    <a class="nav-link" href="{% url 'modulo' 'clientes' %}"><span>♙</span> Clientes</a>
+    <a class="nav-link" href="{% url 'modulo' 'vehiculos' %}"><span>▣</span> Vehículos</a>
+    <a class="nav-link" href="{% url 'modulo' 'citas' %}"><span>▦</span> Citas</a>
+    <a class="nav-link" href="{% url 'modulo' 'diagnosticos' %}"><span>⌕</span> Diagnósticos</a>
+    <a class="nav-link" href="{% url 'modulo' 'ordenes' %}"><span>▤</span> Órdenes de servicio</a>
+    <a class="nav-link" href="{% url 'modulo' 'repuestos' %}"><span>⚙</span> Repuestos</a>
+
+    <div class="menu-label">ANÁLISIS</div>
+    <a class="nav-link" href="{% url 'modulo' 'reportes' %}"><span>▥</span> Reportes</a>
+
+    <div class="sidebar-bottom">
+        <div class="system-status"><span></span> Sistema operativo</div>
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button class="logout-button" type="submit">↪ Cerrar sesión</button>
+        </form>
+    </div>
+</aside>

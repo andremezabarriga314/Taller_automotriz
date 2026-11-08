@@ -1,0 +1,136 @@
+﻿{% load static %}
+
+<aside class="sidebar" id="sidebar">
+
+    <a class="brand" href="{% url 'dashboard' %}">
+        <span class="brand-icon">
+            <span>M</span>
+        </span>
+        <span class="brand-copy">
+            <strong>MOTOR<span>TECH</span></strong>
+            <small>AUTOMOTIVE MANAGEMENT</small>
+        </span>
+    </a>
+
+    <div class="sidebar-divider"></div>
+
+    <nav class="sidebar-navigation">
+
+        <div class="sidebar-section">
+            <div class="menu-label">PRINCIPAL</div>
+
+            <a class="nav-link {% if request.path == '/' %}active{% endif %}"
+               href="{% url 'dashboard' %}">
+                <span class="nav-icon">▦</span>
+                <span>Dashboard</span>
+                <span class="nav-indicator"></span>
+            </a>
+        </div>
+
+
+        <div class="sidebar-section">
+            <div class="menu-label">GESTIÓN</div>
+
+            <a class="nav-link {% if '/clientes/' in request.path %}active{% endif %}"
+               href="{% url 'crud_list' 'clientes' %}">
+                <span class="nav-icon">♙</span>
+                <span>Clientes</span>
+            </a>
+
+            <a class="nav-link {% if '/vehiculos/' in request.path %}active{% endif %}"
+               href="{% url 'crud_list' 'vehiculos' %}">
+                <span class="nav-icon">▣</span>
+                <span>Vehículos</span>
+            </a>
+        </div>
+
+
+        <div class="sidebar-section">
+            <div class="menu-label">AGENDA</div>
+
+            <a class="nav-link {% if '/citas/' in request.path %}active{% endif %}"
+               href="{% url 'crud_list' 'citas' %}">
+                <span class="nav-icon">▦</span>
+                <span>Agenda y citas</span>
+            </a>
+        </div>
+
+
+        <div class="sidebar-section">
+            <div class="menu-label">TALLER</div>
+
+            <a class="nav-link {% if '/diagnosticos/' in request.path %}active{% endif %}"
+               href="{% url 'crud_list' 'diagnosticos' %}">
+                <span class="nav-icon">⌕</span>
+                <span>Diagnósticos</span>
+            </a>
+
+            <a class="nav-link {% if '/ordenes/' in request.path %}active{% endif %}"
+               href="{% url 'crud_list' 'ordenes' %}">
+                <span class="nav-icon">▤</span>
+                <span>Órdenes de servicio</span>
+            </a>
+
+            <a class="nav-link {% if '/detalles/' in request.path %}active{% endif %}"
+               href="{% url 'crud_list' 'detalles' %}">
+                <span class="nav-icon">▧</span>
+                <span>Detalles de órdenes</span>
+            </a>
+        </div>
+
+
+        <div class="sidebar-section">
+            <div class="menu-label">INVENTARIO</div>
+
+            <a class="nav-link {% if '/repuestos/' in request.path %}active{% endif %}"
+               href="{% url 'crud_list' 'repuestos' %}">
+                <span class="nav-icon">⚙</span>
+                <span>Repuestos</span>
+            </a>
+        </div>
+
+
+        <div class="sidebar-section">
+            <div class="menu-label">ANÁLISIS</div>
+
+            <a class="nav-link {% if '/modulo/reportes/' in request.path %}active{% endif %}"
+               href="{% url 'modulo' 'reportes' %}">
+                <span class="nav-icon">▥</span>
+                <span>Reportes</span>
+            </a>
+        </div>
+
+    </nav>
+
+    <div class="sidebar-spacer"></div>
+
+    <div class="sidebar-status">
+        <span class="status-light"></span>
+        <div>
+            <strong>Sistema operativo</strong>
+            <small>Todos los módulos disponibles</small>
+        </div>
+    </div>
+
+    <div class="sidebar-user">
+        <div class="sidebar-user-avatar">
+            {{ request.user.username|first|upper }}
+        </div>
+
+        <div class="sidebar-user-info">
+            <strong>{{ request.user.username }}</strong>
+            <small>Administrador</small>
+        </div>
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button
+                class="logout-button"
+                type="submit"
+                title="Cerrar sesión">
+                ↗
+            </button>
+        </form>
+    </div>
+
+</aside>

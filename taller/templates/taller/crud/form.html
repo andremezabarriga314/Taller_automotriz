@@ -1,0 +1,64 @@
+{% extends "taller/base.html" %}
+{% block title %}{{ accion }} | {{ config.titulo }}{% endblock %}
+
+{% block content %}
+<div class="module-page">
+
+    <div class="module-heading">
+        <div class="module-heading-copy">
+            <div class="eyebrow"><span></span> {{ config.titulo|upper }} / FORMULARIO</div>
+            <h1>{{ accion }}</h1>
+            <p>Completa los datos solicitados para actualizar la información del taller.</p>
+        </div>
+
+        <a class="secondary-button" href="{% url 'crud_list' slug %}">
+            ← Volver al listado
+        </a>
+    </div>
+
+    <section class="data-panel form-panel">
+        <div class="data-panel-header form-panel-header">
+            <div>
+                <span class="panel-kicker">GESTIÓN DE INFORMACIÓN</span>
+                <h2>Datos del registro</h2>
+                <p>Los campos marcados por el sistema deben completarse correctamente.</p>
+            </div>
+            <div class="form-header-icon">✎</div>
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="form-errors">{{ form.non_field_errors }}</div>
+            {% endif %}
+
+            <div class="crud-form-grid">
+                {% for field in form %}
+                <div class="crud-field {% if field.field.widget.input_type == 'checkbox' %}checkbox-field{% endif %}">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+
+                    {% if field.help_text %}
+                        <small class="field-help">{{ field.help_text }}</small>
+                    {% endif %}
+
+                    {% for error in field.errors %}
+                        <span class="field-error">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="form-actions">
+                <a class="secondary-button" href="{% url 'crud_list' slug %}">
+                    Cancelar
+                </a>
+                <button class="primary-button" type="submit">
+                    <span>✓</span> {{ accion }}
+                </button>
+            </div>
+        </form>
+    </section>
+</div>
+{% endblock %}

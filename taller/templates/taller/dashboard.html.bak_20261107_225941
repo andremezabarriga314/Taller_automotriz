@@ -1,0 +1,222 @@
+﻿{% extends "taller/base.html" %}
+{% block title %}Panel de control | MotorTech Service{% endblock %}
+{% block page_title %}Panel de control{% endblock %}
+
+{% block content %}
+<div class="mt-dashboard">
+
+    <header class="mt-hero">
+        <div class="mt-hero-content">
+            <span class="mt-overline">MOTORTECH SERVICE / CENTRO DE CONTROL</span>
+            <h1>Todo tu taller,<br><span>bajo control.</span></h1>
+            <p>Bienvenido, {{ request.user.username }}. Consulta la actividad y el estado general de tu negocio.</p>
+            <div class="mt-hero-actions">
+                <a href="{% url 'modulo' 'citas' %}" class="mt-btn-primary">＋ Nueva gestión</a>
+                <a href="{% url 'modulo' 'reportes' %}" class="mt-btn-secondary">Consultar reportes <span>↗</span></a>
+            </div>
+        </div>
+        <div class="mt-hero-visual">
+            <div class="mt-orbit mt-orbit-one"></div>
+            <div class="mt-orbit mt-orbit-two"></div>
+            <div class="mt-engine-icon">⚙</div>
+            <div class="mt-hero-tag">
+                <span class="mt-live-dot"></span>
+                SISTEMA OPERATIVO
+            </div>
+            <div class="mt-hero-caption">GESTIÓN INTELIGENTE<br>DE SERVICIO AUTOMOTRIZ</div>
+        </div>
+    </header>
+
+    <div class="mt-section-heading">
+        <div>
+            <span class="mt-overline">VISTA GENERAL</span>
+            <h2>Indicadores del taller</h2>
+        </div>
+        <span class="mt-section-note">Datos registrados en el sistema</span>
+    </div>
+
+    <div class="mt-stats-grid">
+        <a href="{% url 'modulo' 'clientes' %}" class="mt-stat-card">
+            <div class="mt-stat-top"><span>CLIENTES</span><span class="mt-stat-icon">♙</span></div>
+            <strong>{{ total_clientes }}</strong>
+            <small>Clientes registrados</small>
+            <div class="mt-stat-footer"><span>Gestionar clientes</span><span>↗</span></div>
+        </a>
+
+        <a href="{% url 'modulo' 'vehiculos' %}" class="mt-stat-card">
+            <div class="mt-stat-top"><span>VEHÍCULOS</span><span class="mt-stat-icon">▣</span></div>
+            <strong>{{ total_vehiculos }}</strong>
+            <small>Vehículos registrados</small>
+            <div class="mt-stat-footer"><span>Ver vehículos</span><span>↗</span></div>
+        </a>
+
+        <a href="{% url 'modulo' 'citas' %}" class="mt-stat-card">
+            <div class="mt-stat-top"><span>CITAS</span><span class="mt-stat-icon">▦</span></div>
+            <strong>{{ total_citas }}</strong>
+            <small>Citas registradas</small>
+            <div class="mt-stat-footer"><span>Consultar agenda</span><span>↗</span></div>
+        </a>
+
+        <a href="{% url 'modulo' 'diagnosticos' %}" class="mt-stat-card">
+            <div class="mt-stat-top"><span>DIAGNÓSTICOS</span><span class="mt-stat-icon">⌕</span></div>
+            <strong>{{ total_diagnosticos }}</strong>
+            <small>Diagnósticos registrados</small>
+            <div class="mt-stat-footer"><span>Ver diagnósticos</span><span>↗</span></div>
+        </a>
+
+        <a href="{% url 'modulo' 'ordenes' %}" class="mt-stat-card mt-stat-featured">
+            <div class="mt-stat-top"><span>ÓRDENES DE SERVICIO</span><span class="mt-stat-icon">▤</span></div>
+            <strong>{{ total_ordenes }}</strong>
+            <small>Órdenes registradas</small>
+            <div class="mt-stat-footer"><span>Gestionar órdenes</span><span>↗</span></div>
+        </a>
+
+        <a href="{% url 'modulo' 'repuestos' %}" class="mt-stat-card">
+            <div class="mt-stat-top"><span>REPUESTOS</span><span class="mt-stat-icon">⚙</span></div>
+            <strong>{{ total_repuestos }}</strong>
+            <small>Repuestos registrados</small>
+            <div class="mt-stat-footer"><span>Ver inventario</span><span>↗</span></div>
+        </a>
+    </div>
+
+    <div class="mt-section-heading mt-section-spaced">
+        <div>
+            <span class="mt-overline">ACTIVIDAD OPERATIVA</span>
+            <h2>Seguimiento del taller</h2>
+        </div>
+    </div>
+
+    <div class="mt-main-grid">
+
+        <section class="mt-panel mt-appointments">
+            <div class="mt-panel-heading">
+                <div>
+                    <span class="mt-overline">PLANIFICACIÓN</span>
+                    <h3>Últimas citas</h3>
+                    <p>Agenda reciente de atención</p>
+                </div>
+                <a href="{% url 'modulo' 'citas' %}" class="mt-view-link">Ver todas <span>→</span></a>
+            </div>
+
+            {% if citas_recientes %}
+            <div class="mt-table-wrap">
+                <table class="mt-table">
+                    <thead>
+                        <tr>
+                            <th>CLIENTE</th>
+                            <th>VEHÍCULO</th>
+                            <th>FECHA Y HORA</th>
+                            <th>ESTADO</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for cita in citas_recientes %}
+                        <tr>
+                            <td><strong>{{ cita.cliente }}</strong></td>
+                            <td>{{ cita.vehiculo }}</td>
+                            <td>{{ cita.fecha_hora|date:"d/m/Y H:i" }}</td>
+                            <td><span class="mt-status">{{ cita.get_estado_display }}</span></td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="mt-empty">
+                <span class="mt-empty-icon">▦</span>
+                <strong>Agenda disponible</strong>
+                <p>Aún no hay citas registradas en el sistema.</p>
+                <a href="{% url 'modulo' 'citas' %}">Ir a citas →</a>
+            </div>
+            {% endif %}
+        </section>
+
+        <section class="mt-panel mt-inventory">
+            <div class="mt-panel-heading">
+                <div>
+                    <span class="mt-overline">CONTROL DE EXISTENCIAS</span>
+                    <h3>Alertas de inventario</h3>
+                    <p>Repuestos que requieren revisión</p>
+                </div>
+                <span class="mt-warning-symbol">!</span>
+            </div>
+
+            {% if repuestos_bajos %}
+                <div class="mt-stock-list">
+                {% for repuesto in repuestos_bajos %}
+                    <div class="mt-stock-item">
+                        <div class="mt-stock-info">
+                            <div>
+                                <strong>{{ repuesto.nombre }}</strong>
+                                <small>Código: {{ repuesto.codigo }}</small>
+                            </div>
+                            <span class="mt-stock-value">{{ repuesto.stock }} <small>/ {{ repuesto.stock_minimo }}</small></span>
+                        </div>
+                        <div class="mt-stock-track"><span></span></div>
+                        <div class="mt-stock-label">Stock igual o inferior al mínimo</div>
+                    </div>
+                {% endfor %}
+                </div>
+            {% else %}
+                <div class="mt-empty mt-empty-compact">
+                    <span class="mt-empty-icon">✓</span>
+                    <strong>Sin alertas de stock</strong>
+                    <p>No se encontraron repuestos por debajo del mínimo.</p>
+                </div>
+            {% endif %}
+
+            <a href="{% url 'modulo' 'repuestos' %}" class="mt-inventory-link">Abrir inventario completo →</a>
+        </section>
+    </div>
+
+    <section class="mt-panel mt-orders">
+        <div class="mt-panel-heading">
+            <div>
+                <span class="mt-overline">GESTIÓN DE SERVICIOS</span>
+                <h3>Órdenes recientes</h3>
+                <p>Últimos trabajos registrados en el taller</p>
+            </div>
+            <a href="{% url 'modulo' 'ordenes' %}" class="mt-view-link">Ver todas <span>→</span></a>
+        </div>
+
+        {% if ordenes_recientes %}
+        <div class="mt-table-wrap">
+            <table class="mt-table">
+                <thead>
+                    <tr>
+                        <th>NÚMERO</th>
+                        <th>CLIENTE</th>
+                        <th>VEHÍCULO</th>
+                        <th>FECHA DE INGRESO</th>
+                        <th>ESTADO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for orden in ordenes_recientes %}
+                    <tr>
+                        <td><strong class="mt-order-number">#{{ orden.numero }}</strong></td>
+                        <td>{{ orden.cliente }}</td>
+                        <td>{{ orden.vehiculo }}</td>
+                        <td>{{ orden.fecha_ingreso|date:"d/m/Y" }}</td>
+                        <td><span class="mt-status">{{ orden.get_estado_display }}</span></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="mt-empty">
+            <span class="mt-empty-icon">▤</span>
+            <strong>Sin órdenes registradas</strong>
+            <p>Cuando registres una orden de servicio, aparecerá en esta sección.</p>
+            <a href="{% url 'modulo' 'ordenes' %}">Ir a órdenes →</a>
+        </div>
+        {% endif %}
+    </section>
+
+    <footer class="mt-dashboard-footer">
+        <span>MOTORTECH SERVICE <b>·</b> PANEL DE GESTIÓN</span>
+        <span>Experiencia, precisión y control automotriz.</span>
+    </footer>
+</div>
+{% endblock %}

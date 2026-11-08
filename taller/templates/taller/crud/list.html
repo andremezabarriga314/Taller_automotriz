@@ -1,0 +1,116 @@
+{% extends "taller/base.html" %}
+{% block title %}{{ config.titulo }} | MotorTech Service{% endblock %}
+
+{% block content %}
+<div class="module-page">
+
+    <div class="module-heading">
+        <div class="module-heading-copy">
+            <div class="eyebrow"><span></span> ADMINISTRACIÓN / {{ config.titulo|upper }}</div>
+            <h1>{{ config.titulo }}</h1>
+            <p>{{ config.descripcion }}</p>
+        </div>
+
+        <a class="primary-button" href="{% url 'crud_create' slug %}">
+            <span class="button-plus">＋</span>
+            Nuevo registro
+        </a>
+    </div>
+
+    <div class="module-summary">
+        <div class="summary-indicator">
+            <span class="summary-icon">▤</span>
+            <div>
+                <small>REGISTROS TOTALES</small>
+                <strong>{{ cantidad }}</strong>
+            </div>
+        </div>
+
+        <div class="summary-description">
+            Información centralizada del módulo
+        </div>
+    </div>
+
+    <section class="data-panel">
+        <div class="data-panel-header">
+            <div>
+                <span class="panel-kicker">BASE DE DATOS</span>
+                <h2>Listado de {{ config.titulo|lower }}</h2>
+                <p>Consulta y administra la información registrada.</p>
+            </div>
+            <span class="data-count">{{ cantidad }} registros</span>
+        </div>
+
+        <div class="crud-toolbar">
+            <form method="get" class="search-form">
+                <span class="search-icon">⌕</span>
+                <input type="search" name="q" value="{{ consulta }}"
+                       placeholder="Buscar en {{ config.titulo|lower }}..."
+                       aria-label="Buscar registros">
+                <button type="submit">Buscar</button>
+                {% if consulta %}
+                    <a class="clear-search" href="{% url 'crud_list' slug %}">Limpiar</a>
+                {% endif %}
+            </form>
+        </div>
+
+        {% if filas %}
+        <div class="table-wrap">
+            <table class="crud-table">
+                <thead>
+                    <tr>
+                        {% for campo in campos %}
+                            <th>{{ campo.verbose_name|capfirst }}</th>
+                        {% endfor %}
+                        <th class="actions-heading">ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for fila in filas %}
+                    <tr>
+                        {% for valor in fila.valores %}
+                            <td>{{ valor|truncatechars:55 }}</td>
+                        {% endfor %}
+                        <td>
+                            <div class="row-actions">
+                                <a class="action-edit"
+                                   href="{% url 'crud_edit' slug fila.objeto.pk %}">
+                                    <span>✎</span> Editar
+                                </a>
+                                <a class="action-delete"
+                                   href="{% url 'crud_delete' slug fila.objeto.pk %}">
+                                    <span>×</span> Eliminar
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-state-icon">▤</div>
+            <span class="panel-kicker">SIN INFORMACIÓN</span>
+            <h2>{% if consulta %}No encontramos resultados{% else %}Todavía no hay registros{% endif %}</h2>
+            <p>
+                {% if consulta %}
+                    Prueba con otro término de búsqueda.
+                {% else %}
+                    Comienza agregando información a este módulo.
+                {% endif %}
+            </p>
+            {% if not consulta %}
+                <a class="primary-button" href="{% url 'crud_create' slug %}">
+                    ＋ Registrar el primero
+                </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </section>
+
+    <div class="module-footnote">
+        <span>●</span> Los datos se administran desde MotorTech Service.
+    </div>
+</div>
+{% endblock %}

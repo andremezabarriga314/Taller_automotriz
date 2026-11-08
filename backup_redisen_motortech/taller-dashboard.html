@@ -1,0 +1,279 @@
+﻿{% extends "taller/base.html" %}
+
+{% block title %}Dashboard | MotorTech Service{% endblock %}
+
+{% block content %}
+<div class="dashboard-v2">
+
+    <header class="dv-hero">
+        <div class="dv-hero-content">
+            <div class="dv-eyebrow">
+                <span class="dv-pulse"></span>
+                CENTRO DE CONTROL OPERATIVO
+            </div>
+
+            <h1>Todo tu taller.<br><span>En un solo lugar.</span></h1>
+
+            <p>
+                Administra clientes, vehículos, servicios e inventario
+                desde un espacio diseñado para trabajar mejor.
+            </p>
+
+            <div class="dv-hero-actions">
+                <a href="{% url 'crud_create' 'citas' %}" class="dv-primary-action">
+                    <span>＋</span> Nueva cita
+                </a>
+                <a href="{% url 'crud_create' 'ordenes' %}" class="dv-secondary-action">
+                    Nueva orden <span>↗</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="dv-hero-art">
+            <div class="dv-orbit dv-orbit-one"></div>
+            <div class="dv-orbit dv-orbit-two"></div>
+            <div class="dv-art-core">
+                <div class="dv-art-symbol">M</div>
+                <span>MOTORTECH</span>
+                <small>SERVICE CENTER</small>
+            </div>
+            <div class="dv-art-label dv-art-label-top">
+                <span class="dv-art-dot"></span>
+                SISTEMA ACTIVO
+            </div>
+            <div class="dv-art-label dv-art-label-bottom">
+                <strong>360°</strong>
+                <span>CONTROL DEL TALLER</span>
+            </div>
+        </div>
+
+        <div class="dv-hero-bottom">
+            <span>BIENVENIDO, {{ request.user.username|default:"USUARIO" }}</span>
+            <span>GESTIÓN INTELIGENTE <b>·</b> MOTORTECH SERVICE</span>
+        </div>
+    </header>
+
+    <section class="dv-overview">
+        <div class="dv-section-title">
+            <div>
+                <span class="dv-kicker">RESUMEN DEL NEGOCIO</span>
+                <h2>Indicadores generales</h2>
+                <p>Estado actual de los registros del taller</p>
+            </div>
+            <div class="dv-live-status">
+                <span></span> Datos del sistema
+            </div>
+        </div>
+
+        <div class="dv-stats">
+            <a href="{% url 'crud_list' 'clientes' %}" class="dv-stat dv-stat-orange">
+                <div class="dv-stat-heading">
+                    <span>CLIENTES</span>
+                    <span class="dv-stat-icon">♙</span>
+                </div>
+                <div class="dv-stat-number">{{ total_clientes|default:0 }}</div>
+                <div class="dv-stat-bottom">
+                    <span>Base de clientes</span><b>↗</b>
+                </div>
+            </a>
+
+            <a href="{% url 'crud_list' 'vehiculos' %}" class="dv-stat">
+                <div class="dv-stat-heading">
+                    <span>VEHÍCULOS</span>
+                    <span class="dv-stat-icon">▣</span>
+                </div>
+                <div class="dv-stat-number">{{ total_vehiculos|default:0 }}</div>
+                <div class="dv-stat-bottom">
+                    <span>Vehículos registrados</span><b>↗</b>
+                </div>
+            </a>
+
+            <a href="{% url 'crud_list' 'citas' %}" class="dv-stat">
+                <div class="dv-stat-heading">
+                    <span>CITAS</span>
+                    <span class="dv-stat-icon">▦</span>
+                </div>
+                <div class="dv-stat-number">{{ total_citas|default:0 }}</div>
+                <div class="dv-stat-bottom">
+                    <span>Agenda de atención</span><b>↗</b>
+                </div>
+            </a>
+
+            <a href="{% url 'crud_list' 'diagnosticos' %}" class="dv-stat">
+                <div class="dv-stat-heading">
+                    <span>DIAGNÓSTICOS</span>
+                    <span class="dv-stat-icon">⌕</span>
+                </div>
+                <div class="dv-stat-number">{{ total_diagnosticos|default:0 }}</div>
+                <div class="dv-stat-bottom">
+                    <span>Evaluaciones técnicas</span><b>↗</b>
+                </div>
+            </a>
+
+            <a href="{% url 'crud_list' 'ordenes' %}" class="dv-stat">
+                <div class="dv-stat-heading">
+                    <span>ÓRDENES</span>
+                    <span class="dv-stat-icon">▤</span>
+                </div>
+                <div class="dv-stat-number">{{ total_ordenes|default:0 }}</div>
+                <div class="dv-stat-bottom">
+                    <span>Servicios registrados</span><b>↗</b>
+                </div>
+            </a>
+
+            <a href="{% url 'crud_list' 'repuestos' %}" class="dv-stat">
+                <div class="dv-stat-heading">
+                    <span>REPUESTOS</span>
+                    <span class="dv-stat-icon">⚙</span>
+                </div>
+                <div class="dv-stat-number">{{ total_repuestos|default:0 }}</div>
+                <div class="dv-stat-bottom">
+                    <span>Elementos de inventario</span><b>↗</b>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section class="dv-main-grid">
+
+        <article class="dv-card dv-appointments">
+            <div class="dv-card-heading">
+                <div>
+                    <span class="dv-kicker">PROGRAMACIÓN</span>
+                    <h3>Agenda reciente</h3>
+                    <p>Últimas citas registradas</p>
+                </div>
+                <a href="{% url 'crud_list' 'citas' %}" class="dv-text-link">
+                    Ver agenda <span>→</span>
+                </a>
+            </div>
+
+            {% if citas_recientes %}
+                <div class="dv-appointment-list">
+                    {% for cita in citas_recientes %}
+                    <div class="dv-appointment">
+                        <div class="dv-date-block">
+                            <strong>{{ cita.fecha_hora|date:"d" }}</strong>
+                            <span>{{ cita.fecha_hora|date:"M" }}</span>
+                        </div>
+                        <div class="dv-appointment-info">
+                            <strong>{{ cita.cliente }}</strong>
+                            <span>{{ cita.vehiculo }}</span>
+                        </div>
+                        <div class="dv-appointment-meta">
+                            <strong>{{ cita.fecha_hora|date:"H:i" }}</strong>
+                            <span>{{ cita.get_estado_display }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="dv-empty">
+                    <span>▦</span>
+                    <strong>Tu agenda está despejada</strong>
+                    <p>Las nuevas citas aparecerán aquí.</p>
+                    <a href="{% url 'crud_create' 'citas' %}">Registrar una cita →</a>
+                </div>
+            {% endif %}
+        </article>
+
+        <article class="dv-card dv-inventory">
+            <div class="dv-card-heading">
+                <div>
+                    <span class="dv-kicker">CONTROL DE EXISTENCIAS</span>
+                    <h3>Alertas de inventario</h3>
+                    <p>Repuestos en nivel mínimo o inferior</p>
+                </div>
+                <span class="dv-warning-icon">!</span>
+            </div>
+
+            {% if repuestos_bajos %}
+                <div class="dv-inventory-list">
+                    {% for repuesto in repuestos_bajos %}
+                    <div class="dv-inventory-item">
+                        <div class="dv-inventory-info">
+                            <span class="dv-inventory-symbol">⚙</span>
+                            <div>
+                                <strong>{{ repuesto.nombre }}</strong>
+                                <small>{{ repuesto.codigo }}</small>
+                            </div>
+                        </div>
+                        <div class="dv-quantity">
+                            <strong>{{ repuesto.stock }}</strong>
+                            <small>mín. {{ repuesto.stock_minimo }}</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="dv-empty dv-empty-small">
+                    <span>✓</span>
+                    <strong>Inventario bajo control</strong>
+                    <p>No hay alertas de stock actualmente.</p>
+                </div>
+            {% endif %}
+
+            <a href="{% url 'crud_list' 'repuestos' %}" class="dv-inventory-footer">
+                Abrir inventario completo <span>↗</span>
+            </a>
+        </article>
+
+    </section>
+
+    <section class="dv-card dv-orders">
+        <div class="dv-card-heading">
+            <div>
+                <span class="dv-kicker">OPERACIONES DEL TALLER</span>
+                <h3>Actividad de servicio</h3>
+                <p>Últimas órdenes de trabajo registradas</p>
+            </div>
+            <a href="{% url 'crud_list' 'ordenes' %}" class="dv-text-link">
+                Todas las órdenes <span>→</span>
+            </a>
+        </div>
+
+        {% if ordenes_recientes %}
+        <div class="dv-table-scroll">
+            <table class="dv-table">
+                <thead>
+                    <tr>
+                        <th>ORDEN</th>
+                        <th>CLIENTE</th>
+                        <th>VEHÍCULO</th>
+                        <th>FECHA DE INGRESO</th>
+                        <th>ESTADO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for orden in ordenes_recientes %}
+                    <tr>
+                        <td><span class="dv-order-id">#{{ orden.numero }}</span></td>
+                        <td>{{ orden.cliente }}</td>
+                        <td>{{ orden.vehiculo }}</td>
+                        <td>{{ orden.fecha_ingreso|date:"d/m/Y" }}</td>
+                        <td><span class="dv-order-status">{{ orden.get_estado_display }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="dv-empty">
+            <span>▤</span>
+            <strong>Aún no hay órdenes de servicio</strong>
+            <p>Registra una orden para comenzar a visualizar la actividad del taller.</p>
+            <a href="{% url 'crud_create' 'ordenes' %}">Crear primera orden →</a>
+        </div>
+        {% endif %}
+    </section>
+
+    <footer class="dv-footer">
+        <div>
+            <strong>MOTORTECH <span>SERVICE</span></strong>
+            <small>PLATAFORMA DE GESTIÓN AUTOMOTRIZ</small>
+        </div>
+        <span>Precisión en cada servicio. Control en cada operación.</span>
+    </footer>
+
+</div>
+{% endblock %}

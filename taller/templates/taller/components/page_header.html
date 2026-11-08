@@ -1,0 +1,17 @@
+﻿<div class="page-heading">
+    <div>
+        {% if eyebrow %}
+            <span class="page-eyebrow">{{ eyebrow }}</span>
+        {% endif %}
+        <h1>{{ heading }}</h1>
+        {% if description %}
+            <p>{{ description }}</p>
+        {% endif %}
+    </div>
+
+    {% if action_url %}
+        <a href="{{ action_url }}" class="btn btn-primary">
+            {{ action_label|default:"Nuevo registro" }}
+        </a>
+    {% endif %}
+</div>

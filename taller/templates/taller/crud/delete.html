@@ -1,0 +1,17 @@
+﻿{% extends "taller/base.html" %}
+{% block title %}Eliminar registro | MotorTech{% endblock %}
+{% block page_title %}Eliminar registro{% endblock %}
+{% block content %}
+<section class="panel delete-panel">
+    <div class="delete-symbol">!</div>
+    <h1>¿Eliminar este registro?</h1>
+    <p>Vas a eliminar el siguiente elemento de {{ config.titulo }}:</p>
+    <div class="delete-record">{{ objeto }}</div>
+    <p class="delete-warning">Esta acción no se puede deshacer. Si existen relaciones protegidas, Django impedirá la eliminación.</p>
+    <form method="post" class="form-actions">
+        {% csrf_token %}
+        <a class="secondary-button" href="{% url 'crud_list' slug %}">Cancelar</a>
+        <button class="danger-button" type="submit">Confirmar eliminación</button>
+    </form>
+</section>
+{% endblock %}

@@ -1,0 +1,53 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080d15">
+    <title>{% block title %}MotorTech Service{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'taller/css/app.css' %}?v=20261109">
+    <link rel="stylesheet" href="{% static 'taller/css/components.css' %}?v=20261109">
+
+    {% block extra_css %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'taller/css/dashboard-v2.css' %}?v=1">
+</head>
+<body>
+    <div class="app-layout">
+        {% include "taller/components/sidebar.html" %}
+
+        <main class="main-content">
+            {% include "taller/components/navbar.html" %}
+
+            <section class="page-content">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="notice">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+
+                {% block content %}{% endblock %}
+            </section>
+
+            <footer class="footer">
+                © 2026 MotorTech Service · Gestión inteligente de taller
+            </footer>
+        </main>
+    </div>
+
+    <script src="{% static 'taller/js/app.js' %}"></script>
+    <script src="{% static 'taller/js/spa.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+
+
+
+
+
+

@@ -1,0 +1,11 @@
+﻿<div class="empty-state">
+    <div class="empty-state-icon">▤</div>
+    <h3>{{ empty_title|default:"No hay registros disponibles" }}</h3>
+    <p>{{ empty_description|default:"Los registros aparecerán aquí cuando agregues información." }}</p>
+
+    {% if empty_action_url %}
+        <a href="{{ empty_action_url }}" class="btn btn-primary">
+            {{ empty_action_label|default:"Crear registro" }}
+        </a>
+    {% endif %}
+</div>

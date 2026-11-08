@@ -1,0 +1,11 @@
+﻿<header class="topbar">
+    <button class="menu-toggle" type="button" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+    <div>
+        <span class="topbar-caption">CENTRO DE CONTROL</span>
+        <strong>{% block page_title %}Panel principal{% endblock %}</strong>
+    </div>
+    <div class="user-area">
+        <div class="user-avatar">{{ request.user.username|first|upper }}</div>
+        <div><strong>{{ request.user.username }}</strong><small>Administrador</small></div>
+    </div>
+</header>

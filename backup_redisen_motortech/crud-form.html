@@ -1,0 +1,39 @@
+﻿{% extends "taller/base.html" %}
+{% block title %}{{ accion }} | {{ config.titulo }}{% endblock %}
+{% block page_title %}{{ accion }} · {{ config.titulo }}{% endblock %}
+{% block content %}
+<div class="welcome-row">
+    <div>
+        <div class="eyebrow">{{ config.titulo|upper }}</div>
+        <h1>{{ accion }}</h1>
+        <p>Completa los campos para guardar la información.</p>
+    </div>
+</div>
+
+<section class="panel form-panel">
+    <form method="post">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+        <div class="form-errors">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <div class="crud-form-grid">
+            {% for field in form %}
+            <div class="crud-field {% if field.field.widget.input_type == 'checkbox' %}checkbox-field{% endif %}">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+                {% for error in field.errors %}
+                <span class="field-error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="form-actions">
+            <a class="secondary-button" href="{% url 'crud_list' slug %}">Cancelar</a>
+            <button class="primary-button" type="submit">{{ accion }}</button>
+        </div>
+    </form>
+</section>
+{% endblock %}

@@ -1,0 +1,160 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso | MotorTech Service</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+            background: radial-gradient(circle at top left,#173b5d,#090e18 55%);
+            color: #edf4ff;
+            font-family: Arial,sans-serif;
+        }
+        .login-card {
+            width: 100%;
+            max-width: 430px;
+            padding: 42px;
+            background: #111c2d;
+            border: 1px solid #263a54;
+            border-radius: 18px;
+            box-shadow: 0 25px 80px #0008;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 38px;
+        }
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            border-radius: 13px;
+            background: linear-gradient(135deg,#168bff,#20d1ce);
+            font-size: 25px;
+            font-weight: bold;
+        }
+        .logo strong { font-size: 20px; }
+        .logo small {
+            display: block;
+            margin-top: 5px;
+            color: #8194ad;
+            letter-spacing: 2px;
+            font-size: 9px;
+        }
+        .eyebrow {
+            color: #42b2ff;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        h1 { margin: 12px 0; font-size: 29px; }
+        .subtitle { color: #91a2b9; font-size: 13px; line-height: 1.7; }
+        label {
+            display: block;
+            margin: 22px 0 9px;
+            color: #c5d1e0;
+            font-size: 13px;
+        }
+        input:not([type=checkbox]) {
+            width: 100%;
+            height: 49px;
+            padding: 0 14px;
+            color: white;
+            background: #0c1727;
+            border: 1px solid #2b3e57;
+            border-radius: 8px;
+            outline: none;
+        }
+        input:focus { border-color: #38a9ff; }
+        .remember {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin: 20px 0;
+            color: #a4b3c7;
+            font-size: 12px;
+        }
+        .remember label { margin: 0; }
+        .remember input { accent-color: #168bff; }
+        button {
+            width: 100%;
+            height: 49px;
+            border: 0;
+            border-radius: 8px;
+            background: linear-gradient(100deg,#168bff,#1baecb);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover { filter: brightness(1.12); }
+        .error {
+            margin-top: 12px;
+            color: #ff9292;
+            font-size: 12px;
+        }
+        .footer {
+            margin-top: 25px;
+            color: #8496ad;
+            text-align: center;
+            font-size: 12px;
+        }
+        .footer a { color: #57b8ff; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <main class="login-card">
+        <div class="logo">
+            <div class="logo-icon">M</div>
+            <div>
+                <strong>MotorTech</strong>
+                <small>SERVICE MANAGEMENT</small>
+            </div>
+        </div>
+
+        <span class="eyebrow">GESTIÓN INTELIGENTE</span>
+        <h1>Bienvenido de nuevo</h1>
+        <p class="subtitle">Ingresa tus credenciales para acceder al sistema de gestión del taller.</p>
+
+        {% for message in messages %}
+            <p class="error">{{ message }}</p>
+        {% endfor %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <label for="id_username">Usuario</label>
+            <input type="text" name="username" id="id_username"
+                   placeholder="Ingresa tu usuario" required autofocus>
+
+            <label for="id_password">Contraseña</label>
+            <input type="password" name="password" id="id_password"
+                   placeholder="Ingresa tu contraseña" required>
+
+            <div class="remember">
+                <input type="checkbox" name="recordarme" id="recordarme">
+                <label for="recordarme">Mantener mi cuenta abierta</label>
+            </div>
+
+            {% if form.errors %}
+                <p class="error">Usuario o contraseña incorrectos.</p>
+            {% endif %}
+
+            <button type="submit">Ingresar al sistema →</button>
+        </form>
+
+        <div class="footer">
+            ¿No tienes una cuenta?
+            <a href="{% url 'registro' %}">Crear cuenta</a>
+        </div>
+    </main>
+</body>
+</html>

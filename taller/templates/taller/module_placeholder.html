@@ -1,0 +1,28 @@
+﻿{% extends "taller/base.html" %}
+{% block title %}{{ nombre_modulo }} | MotorTech Service{% endblock %}
+{% block page_title %}{{ nombre_modulo }}{% endblock %}
+{% block content %}
+<div class="welcome-row">
+    <div>
+        <div class="eyebrow">GESTIÓN DEL TALLER</div>
+        <h1>{{ nombre_modulo }}</h1>
+        <p>Administración de {{ nombre_modulo|lower }} del centro de servicio.</p>
+    </div>
+    <span class="date-chip">Módulo disponible</span>
+</div>
+<div class="stats-grid">
+    <div class="stat-card">
+        <span class="stat-label">Registros actuales</span>
+        <strong class="stat-number">{{ cantidad }}</strong>
+        <span class="stat-foot">Datos almacenados</span>
+    </div>
+</div>
+<section class="panel">
+    <div class="empty-state">
+        <div class="empty-icon">⚙</div>
+        <h2>Área de {{ nombre_modulo }}</h2>
+        <p>La pantalla ya está conectada al sistema. Aquí se incorporarán las operaciones de búsqueda, registro, edición y eliminación.</p>
+        <a class="primary-button" href="{% url 'dashboard' %}">Volver al dashboard</a>
+    </div>
+</section>
+{% endblock %}

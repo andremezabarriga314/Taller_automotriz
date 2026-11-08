@@ -1,0 +1,23 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crear cuenta | MotorTech Service</title>
+<link rel="stylesheet" href="{% static 'taller/css/app.css' %}">
+</head>
+<body class="auth-body">
+<div class="auth-form-side standalone">
+    <form method="post" class="auth-card">
+        {% csrf_token %}
+        <span class="eyebrow">MOTORTECH SERVICE</span>
+        <h2>Crear cuenta</h2>
+        <p>Registra un usuario para acceder al sistema.</p>
+        {{ form.as_p }}
+        <button class="primary-button full-button" type="submit">Crear cuenta →</button>
+        <div class="auth-bottom">¿Ya tienes cuenta? <a href="{% url 'login' %}">Iniciar sesión</a></div>
+    </form>
+</div>
+</body>
+</html>

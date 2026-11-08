@@ -1,0 +1,538 @@
+﻿
+========== .\taller\templates\taller\base.html ==========
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#080d15">
+    <title>{% block title %}MotorTech Service{% endblock %}</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{% static 'taller/css/app.css' %}?v=20261109">
+    <link rel="stylesheet" href="{% static 'taller/css/components.css' %}?v=20261109">
+
+    {% block extra_css %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'taller/css/dashboard-v2.css' %}?v=1">
+</head>
+<body>
+    <div class="app-layout">
+        {% include "taller/components/sidebar.html" %}
+
+        <main class="main-content">
+            {% include "taller/components/navbar.html" %}
+
+            <section class="page-content">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="notice">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+
+                {% block content %}{% endblock %}
+            </section>
+
+            <footer class="footer">
+                © 2026 MotorTech Service · Gestión inteligente de taller
+            </footer>
+        </main>
+    </div>
+
+    <script src="{% static 'taller/js/app.js' %}"></script>
+    <script src="{% static 'taller/js/spa.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+
+
+
+
+
+
+
+
+========== .\taller\templates\taller\dashboard.html ==========
+{% extends "taller/base.html" %}
+
+{% block title %}Dashboard | MotorTech Service{% endblock %}
+
+{% block content %}
+<div class="dashboard-v2">
+
+    <header class="dv-hero">
+        <div class="dv-hero-content">
+            <div class="dv-eyebrow">
+                <span class="dv-pulse"></span>
+                CENTRO DE CONTROL OPERATIVO
+            </div>
+
+            <h1>Todo tu taller.<br><span>En un solo lugar.</span></h1>
+
+            <p>
+                Administra clientes, vehículos, servicios e inventario
+                desde un espacio diseñado para trabajar mejor.
+            </p>
+
+            <div class="dv-hero-actions">
+                <a href="{% url 'crud_create' 'citas' %}" class="dv-primary-action">
+                    <span>＋</span> Nueva cita
+                </a>
+                <a href="{% url 'crud_create' 'ordenes' %}" class="dv-secondary-action">
+                    Nueva orden <span>↗</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="dv-hero-art">
+            <div class="dv-orbit dv-orbit-one"></div>
+            <div class="dv-orbit dv-orbit-two"></div>
+            <div class="dv-art-core">
+                <div class="dv-art-symbol">M</div>
+                <span>MOTORTECH</span>
+                <small>SERVICE CENTER</small>
+            </div>
+            <div class="dv-art-label dv-art-label-top">
+                <span class="dv-art-dot"></span>
+                SISTEMA ACTIVO
+            </div>
+            <div class="dv-art-label dv-art-label-bottom">
+                <strong>360°</strong>
+                <span>CONTROL DEL TALLER</span>
+            </div>
+        </div>
+
+        <div class="dv-hero-bottom">
+            <span>BIENVENIDO, {{ request.user.username|default:"USUARIO" }}</span>
+            <span>GESTIÓN INTELIGENTE <b>·</b> MOTORTECH SERVICE</span>
+        </div>
+    </header>
+
+    <section class="dv-overview">
+        <div class="dv-section-title">
+            <div>
+                <span class="dv-kicker">RESUMEN DEL NEGOCIO</span>
+                <h2>Indicadores generales</h2>
+                <p>Estado actual de los registros del taller</p>
+            </div>
+            <div class="dv-live-status">
+                <span></span> Datos del sistema
+            </div>
+        </div>
+
+        <div class="dv-stats">
+            <a href="{% url 'crud_list' 'clientes' %}" class="dv-stat dv-stat-orange">
+                <div class="dv-stat-heading">
+                    <span>CLIENTES</span>
+                    <span class="dv-stat-icon">♙</span>
+                </div>
+                <div class="dv-stat-number">{{ total_clientes|default:0 }}</div>
+                <div class="dv-stat-bottom">
+                    <span>Base de clientes</span><b>↗</b>
+                </div>
+            </a>
+
+            <a href="{% url 'crud_list' 'vehiculos' %}" class="dv-stat">
+                <div class="dv-stat-heading">
+                    <span>VEHÍCULOS</span>
+                    <span class="dv-stat-icon">▣</span>
+                </div>
+                <div class="dv-stat-number">{{ total_vehiculos|default:0 }}</div>
+                <div class="dv-stat-bottom">
+                    <span>Vehículos registrados</span><b>↗</b>
+                </div>
+            </a>
+
+            <a href="{% url 'crud_list' 'citas' %}" class="dv-stat">
+                <div class="dv-stat-heading">
+                    <span>CITAS</span>
+                    <span class="dv-stat-icon">▦</span>
+                </div>
+                <div class="dv-stat-number">{{ total_citas|default:0 }}</div>
+                <div class="dv-stat-bottom">
+                    <span>Agenda de atención</span><b>↗</b>
+                </div>
+            </a>
+
+            <a href="{% url 'crud_list' 'diagnosticos' %}" class="dv-stat">
+                <div class="dv-stat-heading">
+                    <span>DIAGNÓSTICOS</span>
+                    <span class="dv-stat-icon">⌕</span>
+                </div>
+                <div class="dv-stat-number">{{ total_diagnosticos|default:0 }}</div>
+                <div class="dv-stat-bottom">
+                    <span>Evaluaciones técnicas</span><b>↗</b>
+                </div>
+            </a>
+
+            <a href="{% url 'crud_list' 'ordenes' %}" class="dv-stat">
+                <div class="dv-stat-heading">
+                    <span>ÓRDENES</span>
+                    <span class="dv-stat-icon">▤</span>
+                </div>
+                <div class="dv-stat-number">{{ total_ordenes|default:0 }}</div>
+                <div class="dv-stat-bottom">
+                    <span>Servicios registrados</span><b>↗</b>
+                </div>
+            </a>
+
+            <a href="{% url 'crud_list' 'repuestos' %}" class="dv-stat">
+                <div class="dv-stat-heading">
+                    <span>REPUESTOS</span>
+                    <span class="dv-stat-icon">⚙</span>
+                </div>
+                <div class="dv-stat-number">{{ total_repuestos|default:0 }}</div>
+                <div class="dv-stat-bottom">
+                    <span>Elementos de inventario</span><b>↗</b>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section class="dv-main-grid">
+
+        <article class="dv-card dv-appointments">
+            <div class="dv-card-heading">
+                <div>
+                    <span class="dv-kicker">PROGRAMACIÓN</span>
+                    <h3>Agenda reciente</h3>
+                    <p>Últimas citas registradas</p>
+                </div>
+                <a href="{% url 'crud_list' 'citas' %}" class="dv-text-link">
+                    Ver agenda <span>→</span>
+                </a>
+            </div>
+
+            {% if citas_recientes %}
+                <div class="dv-appointment-list">
+                    {% for cita in citas_recientes %}
+                    <div class="dv-appointment">
+                        <div class="dv-date-block">
+                            <strong>{{ cita.fecha_hora|date:"d" }}</strong>
+                            <span>{{ cita.fecha_hora|date:"M" }}</span>
+                        </div>
+                        <div class="dv-appointment-info">
+                            <strong>{{ cita.cliente }}</strong>
+                            <span>{{ cita.vehiculo }}</span>
+                        </div>
+                        <div class="dv-appointment-meta">
+                            <strong>{{ cita.fecha_hora|date:"H:i" }}</strong>
+                            <span>{{ cita.get_estado_display }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="dv-empty">
+                    <span>▦</span>
+                    <strong>Tu agenda está despejada</strong>
+                    <p>Las nuevas citas aparecerán aquí.</p>
+                    <a href="{% url 'crud_create' 'citas' %}">Registrar una cita →</a>
+                </div>
+            {% endif %}
+        </article>
+
+        <article class="dv-card dv-inventory">
+            <div class="dv-card-heading">
+                <div>
+                    <span class="dv-kicker">CONTROL DE EXISTENCIAS</span>
+                    <h3>Alertas de inventario</h3>
+                    <p>Repuestos en nivel mínimo o inferior</p>
+                </div>
+                <span class="dv-warning-icon">!</span>
+            </div>
+
+            {% if repuestos_bajos %}
+                <div class="dv-inventory-list">
+                    {% for repuesto in repuestos_bajos %}
+                    <div class="dv-inventory-item">
+                        <div class="dv-inventory-info">
+                            <span class="dv-inventory-symbol">⚙</span>
+                            <div>
+                                <strong>{{ repuesto.nombre }}</strong>
+                                <small>{{ repuesto.codigo }}</small>
+                            </div>
+                        </div>
+                        <div class="dv-quantity">
+                            <strong>{{ repuesto.stock }}</strong>
+                            <small>mín. {{ repuesto.stock_minimo }}</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="dv-empty dv-empty-small">
+                    <span>✓</span>
+                    <strong>Inventario bajo control</strong>
+                    <p>No hay alertas de stock actualmente.</p>
+                </div>
+            {% endif %}
+
+            <a href="{% url 'crud_list' 'repuestos' %}" class="dv-inventory-footer">
+                Abrir inventario completo <span>↗</span>
+            </a>
+        </article>
+
+    </section>
+
+    <section class="dv-card dv-orders">
+        <div class="dv-card-heading">
+            <div>
+                <span class="dv-kicker">OPERACIONES DEL TALLER</span>
+                <h3>Actividad de servicio</h3>
+                <p>Últimas órdenes de trabajo registradas</p>
+            </div>
+            <a href="{% url 'crud_list' 'ordenes' %}" class="dv-text-link">
+                Todas las órdenes <span>→</span>
+            </a>
+        </div>
+
+        {% if ordenes_recientes %}
+        <div class="dv-table-scroll">
+            <table class="dv-table">
+                <thead>
+                    <tr>
+                        <th>ORDEN</th>
+                        <th>CLIENTE</th>
+                        <th>VEHÍCULO</th>
+                        <th>FECHA DE INGRESO</th>
+                        <th>ESTADO</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for orden in ordenes_recientes %}
+                    <tr>
+                        <td><span class="dv-order-id">#{{ orden.numero }}</span></td>
+                        <td>{{ orden.cliente }}</td>
+                        <td>{{ orden.vehiculo }}</td>
+                        <td>{{ orden.fecha_ingreso|date:"d/m/Y" }}</td>
+                        <td><span class="dv-order-status">{{ orden.get_estado_display }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="dv-empty">
+            <span>▤</span>
+            <strong>Aún no hay órdenes de servicio</strong>
+            <p>Registra una orden para comenzar a visualizar la actividad del taller.</p>
+            <a href="{% url 'crud_create' 'ordenes' %}">Crear primera orden →</a>
+        </div>
+        {% endif %}
+    </section>
+
+    <footer class="dv-footer">
+        <div>
+            <strong>MOTORTECH <span>SERVICE</span></strong>
+            <small>PLATAFORMA DE GESTIÓN AUTOMOTRIZ</small>
+        </div>
+        <span>Precisión en cada servicio. Control en cada operación.</span>
+    </footer>
+
+</div>
+{% endblock %}
+
+
+========== .\taller\templates\taller\crud\list.html ==========
+{% extends "taller/base.html" %}
+{% block title %}{{ config.titulo }} | MotorTech{% endblock %}
+{% block page_title %}{{ config.titulo }}{% endblock %}
+{% block content %}
+<div class="welcome-row">
+    <div>
+        <div class="eyebrow">GESTIÓN DEL TALLER</div>
+        <h1>{{ config.titulo }}</h1>
+        <p>{{ config.descripcion }}</p>
+    </div>
+    <a class="primary-button" href="{% url 'crud_create' slug %}">＋ Nuevo registro</a>
+</div>
+
+<div class="crud-toolbar">
+    <form method="get" class="search-form">
+        <input type="search" name="q" value="{{ consulta }}" placeholder="Buscar registros...">
+        <button type="submit">Buscar</button>
+        {% if consulta %}<a href="{% url 'crud_list' slug %}">Limpiar</a>{% endif %}
+    </form>
+    <span class="record-count">{{ cantidad }} registros</span>
+</div>
+
+<section class="panel">
+    {% if filas %}
+    <div class="table-wrap">
+        <table class="crud-table">
+            <thead>
+                <tr>
+                    {% for campo in campos %}
+                    <th>{{ campo.verbose_name|capfirst }}</th>
+                    {% endfor %}
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fila in filas %}
+                <tr>
+                    {% for valor in fila.valores %}
+                    <td>{{ valor|truncatechars:55 }}</td>
+                    {% endfor %}
+                    <td>
+                        <div class="row-actions">
+                            <a class="action-edit" href="{% url 'crud_edit' slug fila.objeto.pk %}">Editar</a>
+                            <a class="action-delete" href="{% url 'crud_delete' slug fila.objeto.pk %}">Eliminar</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon">▤</div>
+        <h2>No hay registros</h2>
+        <p>{% if consulta %}No se encontraron resultados para tu búsqueda.{% else %}Todavía no has registrado información en este módulo.{% endif %}</p>
+        {% if not consulta %}
+        <a class="primary-button" href="{% url 'crud_create' slug %}">Registrar el primero</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</section>
+{% endblock %}
+
+
+========== .\taller\templates\taller\crud\form.html ==========
+{% extends "taller/base.html" %}
+{% block title %}{{ accion }} | {{ config.titulo }}{% endblock %}
+{% block page_title %}{{ accion }} · {{ config.titulo }}{% endblock %}
+{% block content %}
+<div class="welcome-row">
+    <div>
+        <div class="eyebrow">{{ config.titulo|upper }}</div>
+        <h1>{{ accion }}</h1>
+        <p>Completa los campos para guardar la información.</p>
+    </div>
+</div>
+
+<section class="panel form-panel">
+    <form method="post">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+        <div class="form-errors">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <div class="crud-form-grid">
+            {% for field in form %}
+            <div class="crud-field {% if field.field.widget.input_type == 'checkbox' %}checkbox-field{% endif %}">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}<small>{{ field.help_text }}</small>{% endif %}
+                {% for error in field.errors %}
+                <span class="field-error">{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="form-actions">
+            <a class="secondary-button" href="{% url 'crud_list' slug %}">Cancelar</a>
+            <button class="primary-button" type="submit">{{ accion }}</button>
+        </div>
+    </form>
+</section>
+{% endblock %}
+
+
+========== .\taller\templates\taller\components\sidebar.html ==========
+{% load static %}
+
+<aside class="sidebar" id="sidebar">
+    <a class="brand" href="{% url 'dashboard' %}">
+        <span class="brand-icon">M</span>
+        <span>
+            <strong>MOTORTECH</strong>
+            <small>SERVICE CENTER</small>
+        </span>
+    </a>
+
+    <div class="menu-label">PRINCIPAL</div>
+
+    <a class="nav-link {% if request.path == '/' %}active{% endif %}"
+       href="{% url 'dashboard' %}">
+        <span>◫</span> Dashboard
+    </a>
+
+    <div class="menu-label">GESTIÓN DEL TALLER</div>
+
+    <a class="nav-link {% if '/clientes/' in request.path %}active{% endif %}"
+       href="{% url 'crud_list' 'clientes' %}">
+        <span>♙</span> Clientes
+    </a>
+
+    <a class="nav-link {% if '/vehiculos/' in request.path %}active{% endif %}"
+       href="{% url 'crud_list' 'vehiculos' %}">
+        <span>▣</span> Vehículos
+    </a>
+
+    <a class="nav-link {% if '/citas/' in request.path %}active{% endif %}"
+       href="{% url 'crud_list' 'citas' %}">
+        <span>▦</span> Citas
+    </a>
+
+    <a class="nav-link {% if '/diagnosticos/' in request.path %}active{% endif %}"
+       href="{% url 'crud_list' 'diagnosticos' %}">
+        <span>⌕</span> Diagnósticos
+    </a>
+
+    <a class="nav-link {% if '/ordenes/' in request.path %}active{% endif %}"
+       href="{% url 'crud_list' 'ordenes' %}">
+        <span>▤</span> Órdenes de servicio
+    </a>
+
+    <a class="nav-link {% if '/detalles/' in request.path %}active{% endif %}"
+       href="{% url 'crud_list' 'detalles' %}">
+        <span>▧</span> Detalles de órdenes
+    </a>
+
+    <a class="nav-link {% if '/repuestos/' in request.path %}active{% endif %}"
+       href="{% url 'crud_list' 'repuestos' %}">
+        <span>⚙</span> Repuestos
+    </a>
+
+    <div class="menu-label">ANÁLISIS</div>
+
+    <a class="nav-link {% if '/modulo/reportes/' in request.path %}active{% endif %}"
+       href="{% url 'modulo' 'reportes' %}">
+        <span>▥</span> Reportes
+    </a>
+
+    <div class="sidebar-bottom">
+        <div class="system-status">
+            <span></span> Sistema operativo
+        </div>
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button class="logout-button" type="submit">
+                ↪ Cerrar sesión
+            </button>
+        </form>
+    </div>
+</aside>
+
+
+========== .\taller\templates\taller\components\navbar.html ==========
+<header class="topbar">
+    <button class="menu-toggle" type="button" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+    <div>
+        <span class="topbar-caption">CENTRO DE CONTROL</span>
+        <strong>{% block page_title %}Panel principal{% endblock %}</strong>
+    </div>
+    <div class="user-area">
+        <div class="user-avatar">{{ request.user.username|first|upper }}</div>
+        <div><strong>{{ request.user.username }}</strong><small>Administrador</small></div>
+    </div>
+</header>
+

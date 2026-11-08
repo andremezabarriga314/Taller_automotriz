@@ -1,0 +1,92 @@
+﻿{% extends "taller/base.html" %}
+{% block title %}Dashboard | MotorTech Service{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block content %}
+<div class="welcome-row">
+    <div>
+        <div class="eyebrow">RESUMEN GENERAL</div>
+        <h1>Panel de control</h1>
+        <p>Bienvenido, {{ request.user.username }}. Aquí tienes el estado de tu taller.</p>
+    </div>
+    <div class="date-chip">● Sistema en línea</div>
+</div>
+
+<div class="stats-grid">
+    {% include "taller/components/stat_card.html" with label="Clientes" value=total_clientes icon="♙" description="Clientes registrados" %}
+    {% include "taller/components/stat_card.html" with label="Vehículos" value=total_vehiculos icon="▣" description="Vehículos registrados" %}
+    {% include "taller/components/stat_card.html" with label="Citas" value=total_citas icon="▦" description="Citas registradas" %}
+    {% include "taller/components/stat_card.html" with label="Órdenes" value=total_ordenes icon="▤" description="Órdenes de servicio" %}
+</div>
+
+<div class="dashboard-grid">
+    <section class="panel">
+        <div class="panel-heading">
+            <div><span class="eyebrow">AGENDA</span><h2>Citas recientes</h2></div>
+            <a href="{% url 'modulo' 'citas' %}">Ver módulo →</a>
+        </div>
+        {% if citas_recientes %}
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Cliente</th><th>Vehículo</th><th>Fecha</th><th>Estado</th></tr></thead>
+                <tbody>
+                {% for cita in citas_recientes %}
+                    <tr>
+                        <td>{{ cita.cliente }}</td>
+                        <td>{{ cita.vehiculo }}</td>
+                        <td>{{ cita.fecha_hora|date:"d/m/Y H:i" }}</td>
+                        <td><span class="status">{{ cita.get_estado_display }}</span></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="empty-state">Todavía no hay citas registradas.</div>
+        {% endif %}
+    </section>
+
+    <section class="panel">
+        <div class="panel-heading">
+            <div><span class="eyebrow">INVENTARIO</span><h2>Stock por revisar</h2></div>
+            <a href="{% url 'modulo' 'repuestos' %}">Ver módulo →</a>
+        </div>
+        {% if repuestos_bajos %}
+            {% for repuesto in repuestos_bajos %}
+            <div class="stock-item">
+                <div><strong>{{ repuesto.nombre }}</strong><small>{{ repuesto.codigo }}</small></div>
+                <span class="stock-number">{{ repuesto.stock }} / {{ repuesto.stock_minimo }}</span>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-state">No hay alertas de stock.</div>
+        {% endif %}
+    </section>
+</div>
+
+<section class="panel orders-panel">
+    <div class="panel-heading">
+        <div><span class="eyebrow">OPERACIONES</span><h2>Órdenes recientes</h2></div>
+        <a href="{% url 'modulo' 'ordenes' %}">Ver módulo →</a>
+    </div>
+    {% if ordenes_recientes %}
+    <div class="table-wrap">
+        <table>
+            <thead><tr><th>Número</th><th>Cliente</th><th>Vehículo</th><th>Ingreso</th><th>Estado</th></tr></thead>
+            <tbody>
+            {% for orden in ordenes_recientes %}
+                <tr>
+                    <td>#{{ orden.numero }}</td>
+                    <td>{{ orden.cliente }}</td>
+                    <td>{{ orden.vehiculo }}</td>
+                    <td>{{ orden.fecha_ingreso|date:"d/m/Y" }}</td>
+                    <td><span class="status">{{ orden.get_estado_display }}</span></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="empty-state">Todavía no hay órdenes de servicio.</div>
+    {% endif %}
+</section>
+{% endblock %}

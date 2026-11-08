@@ -1,0 +1,26 @@
+<header class="topbar">
+    <div class="topbar-left">
+        <button class="menu-toggle" type="button"
+                onclick="document.getElementById('sidebar').classList.toggle('open')"
+                aria-label="Abrir menú">☰</button>
+
+        <div class="topbar-heading">
+            <span class="topbar-caption">MOTORTECH / WORKSPACE</span>
+            <strong>Centro de operaciones</strong>
+        </div>
+    </div>
+
+    <div class="topbar-right">
+        <div class="topbar-system">
+            <span></span> SISTEMA ACTIVO
+        </div>
+
+        <div class="topbar-user">
+            <div class="user-avatar">{{ request.user.username|first|upper }}</div>
+            <div class="topbar-user-copy">
+                <strong>{{ request.user.username }}</strong>
+                <small>Administrador</small>
+            </div>
+        </div>
+    </div>
+</header>

@@ -1,0 +1,40 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Acceso | MotorTech Service</title>
+<link rel="stylesheet" href="{% static 'taller/css/app.css' %}">
+</head>
+<body class="auth-body">
+<div class="auth-shell">
+    <div class="auth-decoration">
+        <div class="auth-logo">M</div>
+        <span class="eyebrow">MOTORTECH SERVICE</span>
+        <h1>La gestión de tu taller, en un solo lugar.</h1>
+        <p>Controla clientes, vehículos, diagnósticos y órdenes de servicio desde una plataforma centralizada.</p>
+        <div class="auth-lines"></div>
+        <small>WORKSHOP MANAGEMENT SYSTEM</small>
+    </div>
+    <div class="auth-form-side">
+        <form method="post" class="auth-card">
+            {% csrf_token %}
+            <span class="eyebrow">BIENVENIDO DE NUEVO</span>
+            <h2>Iniciar sesión</h2>
+            <p>Ingresa tus credenciales para continuar.</p>
+            {% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+            <label>Usuario</label>
+            <input type="text" name="username" autocomplete="username" required autofocus>
+            {% if form.username.errors %}<div class="form-errors">{{ form.username.errors }}</div>{% endif %}
+            <label>Contraseña</label>
+            <input type="password" name="password" autocomplete="current-password" required>
+            {% if form.password.errors %}<div class="form-errors">{{ form.password.errors }}</div>{% endif %}
+            <label class="remember"><input type="checkbox" name="recordarme"> Mantener mi cuenta abierta</label>
+            <button class="primary-button full-button" type="submit">Ingresar al sistema <span>→</span></button>
+            <div class="auth-bottom">¿No tienes una cuenta? <a href="{% url 'registro' %}">Crear cuenta</a></div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
